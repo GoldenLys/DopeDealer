@@ -1,0 +1,137 @@
+:root {
+    --white: rgb(255, 255, 255);
+    --green: rgb(0, 194, 0);
+    --green2: rgb(4, 97, 24);
+    --red: rgb(173, 0, 0);
+    --orange: #ff9800;
+    --yellow: rgb(255, 255, 0);
+    --blue: rgb(0, 120, 255);
+    --pink: rgb(237, 34, 255);
+    --purple: rgb(137, 47, 255);
+    --darkgrey5: rgba(27, 28, 29, 0.75);
+    --bg1: rgb(102, 255, 13);
+    --bg2: rgb(20, 156, 43);
+    --bg3: rgb(16, 68, 0);
+}
+
+body {
+    font-family: 'Electrolize';
+    background-color: rgb(34, 119, 238);
+    color: #FFF;
+    font-size: 1rem;
+    background: linear-gradient(115deg, var(--bg1), var(--bg2), var(--bg3));
+    background-size: 300% 400%;
+    -webkit-animation: bganim 5s ease infinite !important;
+    animation: bganim 5s ease infinite !important;
+}
+
+@keyframes bganim {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('img/bg.png');
+    background-size: cover;
+    background-position: center center;
+    z-index: -1;
+}
+
+.ui.inverted.menu,
+.ui.black.message,
+.ui.inverted.message {
+    background-color: var(--darkgrey5) !important;
+    text-align: center;
+}
+
+.rouge {
+    color: var(--red);
+}
+
+.vert {
+    color: var(--green);
+}
+
+.vert2 {
+    color: var(--green2);
+}
+
+.bleu {
+    color: var(--blue);
+}
+
+.jaune {
+    color: var(--yellow);
+}
+
+.orange {
+    color: var(--orange);
+}
+
+.ui.header,
+.ui.header .sub.header {
+    color: #FFF;
+    text-align: center;
+}
+
+.ui.inverted.segment .segment {
+    color: #FFF;
+}
+
+.ui.inverted.segment,
+.ui.primary.inverted.segment {
+    background: transparent;
+}
+
+.ui.horizontal.segments {
+    background: transparent;
+}
+
+.DPI {
+    font-size: 2rem;
+}
+
+.DPC {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.title {
+    color: var(--white) !important;
+    font-size: 1.5em !important;
+    font-family: 'Electrolize', sans-serif !important;
+    font-weight: normal;
+    vertical-align: middle;
+    margin-bottom: 0 !important;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Chrome and Opera */
+  }

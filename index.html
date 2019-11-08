@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Dope Dealer</title>
+    <link rel="shortcut icon" type="image/x-icon" href="img/fav.ico" />
+    <meta charset="UTF-8" name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+HK&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Electrolize&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="DATA/semantic.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://kit-pro.fontawesome.com/releases/v5.11.1/css/pro.min.css" />
+    <link href="dopewars.css?v=0.1" rel="stylesheet" type="text/css">
+    </link>
+</head>
+
+<body class="noselect">
+    <div class="mask"></div>
+    <div class="ui inverted menu" style="margin: 0;border-radius: 0;">
+        <div class="left menu">
+            <h1 class="ui header" style="margin: .1em;">Dope Dealer
+                <div id="version" class="sub header"></div>
+            </h1>
+            <div class="item DPC" id="CASH"></div>
+            <div class="item DPC" id="BANK"></div>
+            <div class="item DPC" id="DEBT"></div>
+            <div class="item DPC" id="DAYS"></div>
+            <div class="item DPC" id="LIFE"></div>
+            <div class="item DPC" id="INVENTORY"></div>
+        </div>
+        <a id="BTN3" class="active item" onclick="hideTabs();">Paris</a>
+        <a id="BTN1" class="item" onclick="ShowMenu(1);">Bank</a>
+        <a id="BTN0" class="item" onclick="ShowMenu(0);">Usurers</a>
+        <a id="BTN4" class="item" onclick="ShowMenu(4);">Save</a>
+        <a id="BTN2" class="item" onclick="ShowMenu(2);">Options</a>
+    </div>
+
+    <div id="Main">
+        <div class="ui black message" style="border-radius: 0 0 .5em .5em;">
+            <div class="fluid big ui inverted yellow button" onclick="changelocation();">Change City</div>
+        </div>
+
+        <div class="ui inverted segments" style="padding: 0.5em 0.5em;">
+            <div class="ui inverted segment">
+                <div class="ui black message" style="padding: 0em;" id="Weed">
+                    <div class="ui horizontal segments">
+                        <div class="ui left aligned segment">
+                            <div onClick="Buy(0, 1);" id="buy-0" class="ui inverted green button">BUY</div>
+                            <div onClick="Buy(0, 10);" id="buy10-0" class="ui inverted green button">BUY 10</div>
+                        </div>
+                        <div class="ui center aligned segment">
+                            <p class="title" id="DT0"></p>
+                            <p class="price" id="DP0"></p>
+                        </div>
+                        <div class="ui right aligned segment">
+                            <div onClick="Sell(0, 1);" id="sell-0" class="ui inverted red button">SELL</div>
+                            <div onClick="Sell(0, 10);" id="sell10-0" class="ui inverted red button">SELL 10</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui black message" style="padding: 0em;" id="Ecstasy">
+                    <div class="ui horizontal segments">
+                        <div class="ui left aligned segment">
+                            <div onClick="Buy(1, 1);" id="buy-1" class="ui inverted green button">BUY</div>
+                            <div onClick="Buy(1, 10);" id="buy10-1" class="ui inverted green button">BUY 10</div>
+                        </div>
+                        <div class="ui center aligned segment">
+                            <p class="title" id="DT1"></p>
+                            <p class="price" id="DP1"></p>
+                        </div>
+                        <div class="ui right aligned segment">
+                            <div onClick="Sell(1, 1);" id="sell-1" class="ui inverted red button">SELL</div>
+                            <div onClick="Sell(1, 10);" id="sell10-1" class="ui inverted red button">SELL 10</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui black message" style="padding: 0em;" id="Cocaine">
+                    <div class="ui horizontal segments">
+                        <div class="ui left aligned segment">
+                            <div onClick="Buy(2, 1);" id="buy-2" class="ui inverted green button">BUY</div>
+                            <div onClick="Buy(2, 10);" id="buy10-2" class="ui inverted green button">BUY 10</div>
+                        </div>
+                        <div class="ui center aligned segment">
+                            <p class="title" id="DT2"></p>
+                            <p class="price" id="DP2"></p>
+                        </div>
+                        <div class="ui right aligned segment">
+                            <div onClick="Sell(2, 1);" id="sell-2" class="ui inverted red button">SELL</div>
+                            <div onClick="Sell(2, 10);" id="sell10-2" class="ui inverted red button">SELL 10</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui black message" style="padding: 0em;" id="Heroine">
+                    <div class="ui horizontal segments">
+                        <div class="ui left aligned segment">
+                            <div onClick="Buy(3, 1);" id="buy-3" class="ui inverted green button">BUY</div>
+                            <div onClick="Buy(3, 10);" id="buy10-3" class="ui inverted green button">BUY 10</div>
+                        </div>
+                        <div class="ui center aligned segment">
+                            <p class="title" id="DT3"></p>
+                            <p class="price" id="DP3"></p>
+                        </div>
+                        <div class="ui right aligned segment">
+                            <div onClick="Sell(3, 1);" id="sell-3" class="ui inverted red button">SELL</div>
+                            <div onClick="Sell(3, 10);" id="sell10-3" class="ui inverted red button">SELL 10</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="ui black message" style="padding: 0em;" id="Hashish">
+                    <div class="ui horizontal segments">
+                        <div class="ui left aligned segment">
+                            <div onClick="Buy(4, 1);" id="buy-4" class="ui inverted green button">BUY</div>
+                            <div onClick="Buy(4, 10);" id="buy10-4" class="ui inverted green button">BUY 10</div>
+                        </div>
+                        <div class="ui center aligned segment">
+                            <p class="title" id="DT4"></p>
+                            <p class="price" id="DP4"></p>
+                        </div>
+                        <div class="ui right aligned segment">
+                            <div onClick="Sell(4, 1);" id="sell-4" class="ui inverted red button">SELL</div>
+                            <div onClick="Sell(4, 10);" id="sell10-4" class="ui inverted red button">SELL 10</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="ui black message" style="padding: 0em;" id="Keta">
+                    <div class="ui horizontal segments">
+                        <div class="ui left aligned segment">
+                            <div onClick="Buy(5, 1);" id="buy-5" class="ui inverted green button">BUY</div>
+                            <div onClick="Buy(5, 10);" id="buy10-5" class="ui inverted green button">BUY 10</div>
+                        </div>
+                        <div class="ui center aligned segment">
+                            <p class="title" id="DT5"></p>
+                            <p class="price" id="DP5"></p>
+                        </div>
+                        <div class="ui right aligned segment">
+                            <div onClick="Sell(5, 1);" id="sell-5" class="ui inverted red button">SELL</div>
+                            <div onClick="Sell(5, 10);" id="sell10-5" class="ui inverted red button">SELL 10</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui black message" style="position: absolute;left: 0;right: 0;text-align: center;bottom: 0;"
+            id="valeurclic"></div>
+    </div>
+    <br>
+    <!--Amélioration du sac-->
+    <div id="menu-sac" style="display: none;">
+        <div class="ui black message">
+            <p class="title">You just found a bag laying on the ground !</p><br>
+            <div class="listed-op">
+                <p id='sactext' class='copytext'></p>
+                <span onClick="addinv();" class="ui green button">Keep the bag</span>
+                <span onClick="hideTabs();" class="ui red button">Leave the bag</span>
+            </div>
+        </div>
+    </div>
+    <!--Fin de partie-->
+    <div id="menu-endgame" style="display: none;">
+        <div class="ui black message">
+            <p class="title">Game Over</p><br>
+            <p id='endtext' class='copytext'></p><br>
+            <span onClick="ending();" class="fluid ui green button">New Game</span>
+        </div>
+    </div>
+
+    <!--Combat-->
+    <div id="menu-combat" style="display: none;">
+        <div class="ui black message">
+            <p class="title">Police control</p><br>
+            <p id='PoliceName' class='copytext'></p>
+            <p id='fightresult' class='copytext'></p>
+            <span onClick="PoliceCheck();" class="ui green button">Accept</span>
+            <span onClick="fight();" class="ui red button">Fight</span>
+            <span onClick="closeCombat();" class="ui grey button">Run</span>
+        </div>
+    </div>
+
+    <!--Options-->
+    <div id="menu-op" style="display: none;">
+        <div class="ui black message">
+            <p class="title">Change maximum playtime</p><br><br>
+            <span onClick="SetMaxDays(31);" class="ui button">30 days</span>
+            <span onClick="SetMaxDays(61);" class="ui button">60 days</span>
+            <span onClick="SetMaxDays(91);" class="ui button">90 days</span>
+            <span onClick="SetMaxDays(121);" class="ui button">120 days</span>
+            <span onClick="SetMaxDays(151);" class="ui button">150 days</span>
+            <span onClick="SetMaxDays(366);" class="ui button">365 days</span>
+            <span onClick="SetMaxDays(731);" class="ui button">730 days</span>
+            <span onClick="SetMaxDays(-1);" class="ui button">Unlimited</span>
+            <br>
+            <p class="ui label" id="MAXDAYS"></p><br><br>
+        </div>
+    </div>
+
+    <!--Banque-->
+    <div id="menu-ba" style="display: none;">
+        <div class="ui black message">
+            <p class="title">Account Management</p><br><br>
+            <span onClick="Deposit(100);" class="ui green button">Deposit 100</span><span onClick="Withdraw(100);"
+                class="ui red button">Withdraw 100</span><br><br>
+            <span onClick="Deposit(1000);" class="ui green button">Deposit 1 000</span><span onClick="Withdraw(1000);"
+                class="ui red button">Withdraw 1 000</span><br><br>
+            <span onClick="Deposit(10000);" class="ui green button">Deposit 10 000</span><span
+                onClick="Withdraw(10000);" class="ui red button">Withdraw 10 000</span><br><br>
+            <span onClick="Deposit(100000);" class="ui green button">Deposit 100 000</span><span
+                onClick="Withdraw(100000);" class="ui red button">Withdraw 100 000</span><br><br>
+            <span onClick="Deposit(1000000);" class="ui green button">Deposit 1M</span><span
+                onClick="Withdraw(1000000);" class="ui red button">Withdraw 1M</span><br><br>
+            <span onClick="Deposit('all');" class="ui green button">Deposit All</span><span onClick="Withdraw('all');"
+                class="ui red button">Withdraw All</span><br><br>
+            <p class="ui label" id="maxactuel"></p><br><br>
+        </div>
+    </div>
+
+    <!--Usuriers-->
+    <div id="menu-us" style="display: none;">
+        <div class="ui black message">
+            <p class="title">Debt Reimbursement</p><br><br>
+            <span onClick="Repay(100);" class="ui button">Repay $100</span>
+            <span onClick="Repay(100000);" class="ui button">Repay $100 000</span><br><br>
+            <span onClick="Repay(1000);" class="ui button">Repay $1 000</span>
+            <span onClick="Repay(1000000);" class="ui button">Repay $1M</span><br><br>
+            <span onClick="Repay(10000);" class="ui button">Repay $10 000</span>
+            <span onClick="Repay('all');" class="ui button">Repay All</span><br><br>
+            <p class="ui label" id="usuactuel"></p><br><br>
+        </div>
+    </div>
+
+    <div id="menu-sa" style="display: none;">
+        <div class="ui black message">
+            <p class="title ">Save Menu</p><br><br>
+            <div class="ui button" onclick="confirmReset();">New Game</div>
+            <div class="ui button" onClick="exportSave();">Export Save</div>
+            <div class="ui button" onClick="importSave();">Import Save</div>
+            <div id="exportBody"></div>
+            <p id='ui label' class='copytext'></p>
+        </div>
+    </div>
+
+    </div>
+</body>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="DATA/semantic.min.js"></script>
+<script type="text/javascript" src="DATA/numeral.min.js"></script>
+<script src="save.js"></script>
+<script src="beautify.js"></script>
+<script src="core.js?v=6.3"></script>
+
+</html>
