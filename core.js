@@ -3,7 +3,7 @@ var usutext = "";
 var sactexte = "0";
 var enemylifetext = "";
 var DRUGSTYPE = ["normal", "normal", "normal", "normal", "normal", "normal"];
-var DRUGSNAME = ["Weed", "Ecstasy", "Cocaine", "Heroine", "Hashish", "Keta"];
+var DRUGSNAME = ["Weed", "Ecstasy", "Cocaine", "Heroine", "Meth", "Keta"];
 var NAMES = ["Evans", "Michel", "Pablo", "Cain", "Bernard", "Alex", "Simon", "Bond", "Reese", "Smith"];
 var OFFICER = "";
 var MAXDAYSTEXT = "";
@@ -34,13 +34,13 @@ var EVENTTEXTS = {
 		"ecstasy good event text",
 		"cocaine good event text",
 		"heroine good event text",
-		"hashish good event text",
+		"meth good event text",
 		"keta good event text"],
 	bad: ["weed bad event text",
 		"ecstasy bad event text",
 		"cocaine bad event text",
 		"heroine bad event text",
-		"hashish bad event text",
+		"meth bad event text",
 		"keta bad event text"],
 };
 
@@ -123,7 +123,7 @@ function endgame() {
 	hideTabs();
 	$("#menu").hide();
 	ShowMenu(6);
-	$("#endtext").html("You have finished this session in " + (player.day - 1) + " days with <span class='vert'>" + fix(player.argent + player.banque, 3) + "</span><br><br> You had a bag with " + player.maxinv + " slot which contained :<br><br>- " + player.inventory[0] + " Weed<br>" + "- " + player.inventory[1] + " Ecstasy<br>" + "- " + player.inventory[2] + " Cocaine<br>" + "- " + player.inventory[3] + " Heroine<br>" + "- " + player.inventory[4] + " Hashish<br>" + "- " + player.inventory[5] + " Keta");
+	$("#endtext").html("You have finished this session in " + (player.day - 1) + " days with <span class='vert'>" + fix(player.argent + player.banque, 3) + "</span><br><br> You had a bag with " + player.maxinv + " slot which contained :<br><br>- " + player.inventory[0] + " Weed<br>" + "- " + player.inventory[1] + " Ecstasy<br>" + "- " + player.inventory[2] + " Cocaine<br>" + "- " + player.inventory[3] + " Heroine<br>" + "- " + player.inventory[4] + " Meth<br>" + "- " + player.inventory[5] + " Keta");
 	autodel();
 }
 
