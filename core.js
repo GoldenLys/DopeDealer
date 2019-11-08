@@ -1,5 +1,5 @@
-var version = "0.1";
-var usutext = "<span class='vert'>The usurers did not pass today</span>";
+var version = "0.2";
+var usutext = "";
 var sactexte = "0";
 var enemylifetext = "";
 var DRUGSTYPE = ["normal", "normal", "normal", "normal", "normal", "normal"];
@@ -7,15 +7,15 @@ var DRUGSNAME = ["Weed", "Ecstasy", "Cocaine", "Heroine", "Hashish", "Keta"];
 var DRUGPRICE = [0, 0, 0, 0, 0, 0];
 var MAXDAYSTEXT = "30 days";
 var player = {
-	emprunt: 5000,
-	argent: 2000,
+	emprunt: 2500,
+	argent: 1000,
 	banque: 0,
 	inv: 0,
 	maxinv: 100,
 	day: 0,
 	maxdays: 31,
 	dtext: "30 days",
-	location: "Paris",
+	location: "New York",
 	inventory: [0, 0, 0, 0, 0, 0],
 	curEnemy: "Evan",
 	curEnemyLife: 100,
@@ -58,25 +58,25 @@ function updateprogression() {
 	player.inv = 0;
 	for (var item in player.inventory) { player.inv += player.inventory[item]; }
 	$("#version").html("v" + version);
-	$("#BTN3").html(player.location);
+	$("#BTN3").html("<i class='jaune map marker alternate icon DPI'></i>" + player.location);
 	$("#sactext").html(sactexte);
-	$("#CASH").html("<i class='fas fa-sack-dollar DPI vert2'></i>$" + fix(player.argent, 2));
-	$("#BANK").html("<i class='far fa-credit-card-front DPI bleu'></i>$" + fix(player.banque, 2));
-	$("#DEBT").html("<i class='far fa-money-check-edit-alt DPI rouge'></i>$" + fix(player.emprunt, 0) + "");
+	$("#CASH").html("<i class='fas fa-sack-dollar DPI vert2'></i>" + fix(player.argent, 3));
+	$("#BANK").html("<i class='far fa-credit-card-front DPI bleu'></i>" + fix(player.banque, 3));
+	$("#DEBT").html("<i class='far fa-money-check-edit-alt DPI rouge'></i>" + fix(player.emprunt, 3) + "");
 	var DAYTEXT = player.day > 1 ? " days" : " day";
 	var MAXDAYS = player.maxdays != -1 ? "/" + (player.maxdays) : "";
 	$("#DAYS").html("<i class='far fa-calendar-alt DPI jaune'></i>" + player.day + MAXDAYS + DAYTEXT);
 	var LIFECOLOR = player.CurLife <= 50 ? "rouge" : "vert";
 	lifetext = "<span class='" + LIFECOLOR + "'>" + player.CurLife + "</span>";
 	$("#LIFE").html("<i class='far fa-heartbeat DPI " + LIFECOLOR + "'></i>" + player.CurLife + "%");
-	$("#maxactuel").html("Bank Account: <span class='bleu'>$" + fix(player.banque, 0) + "</span>");
-	$("#usuactuel").html("Debt Value: <span class='rouge'>$" + fix(player.emprunt, 0) + "</span>");
+	$("#maxactuel").html("Bank Account: <span class='bleu'>" + fix(player.banque, 3) + "</span>");
+	$("#usuactuel").html("Debt Value: <span class='rouge'>" + fix(player.emprunt, 3) + "</span>");
 	$("#INVENTORY").html("<i class='fas fa-sack DPI'></i>" + (player.maxinv - player.inv) + " slots");
 	$("#valeurclic").html(eventtext + "<br>" + usutext);
 	$("#MAXDAYS").html("Actual maximum playtime: " + MAXDAYSTEXT);
 	for (var D in DRUGSTYPE) {
 		$("#DT" + D).html(DRUGSNAME[D] + " (" + player.inventory[D] + ")");
-		$("#DP" + D).html("<span class='" + DRUGSTYPE[D] + "'>$" + fix(DRUGPRICE[D], 0));
+		$("#DP" + D).html("<span class='" + DRUGSTYPE[D] + "'>" + fix(DRUGPRICE[D], 3));
 	}
 	$("#PoliceName").html("<span class='bleu'>The officer " + player.curEnemy + "</span> wants to do a control.<br>He currently have " + enemylifetext + "/" + player.curEnemyMaxLife + "HP.");
 	$("#fightresult").html("You currently have " + lifetext + " HP.");
@@ -92,35 +92,37 @@ function hideMenus() {
 	$("#Main").hide();
 	for (var M in IDS) $("#menu-" + IDS[M]).hide();
 
-	for (var i = 0; i < 6; i++) { $("#BTN" + i).attr("class", "item"); }
+	for (var i = 0; i < 6; i++) { $("#BTN" + i).attr("class", "item DPC"); }
 }
 
 function ShowMenu(id) {
 	var IDS = ["us", "ba", "op", "sac", "sa", "combat", "endgame"];
 	hideMenus();
-	if (id < 5) $("#BTN" + (id)).attr("class", "active item");
+	if (id < 5) $("#BTN" + (id)).attr("class", "active item DPC");
 	$("#menu-" + IDS[id]).show();
 }
 
 function hideTabs() {
 	hideMenus();
 	$("#Main").show();
-	$("#BTN3").attr("class", "active item");
+	$("#BTN3").attr("class", "active item DPC");
 }
 
 function endgame() {
 	hideTabs();
 	$("#menu").hide();
 	ShowMenu(6);
-	$("#endtext").html("You have finished this session in " + (player.day - 1) + " days with <span class='vert'>$" + fix(player.argent + player.banque, 2) + "</span><br><br> You had a bag with " + player.maxinv + " slot which contained :<br><br>- " + player.inventory[0] + " Weed<br>" + "- " + player.inventory[1] + " Ecstasy<br>" + "- " + player.inventory[2] + " Cocaine<br>" + "- " + player.inventory[3] + " Heroine<br>" + "- " + player.inventory[4] + " Hashish<br>" + "- " + player.inventory[5] + " Keta");
+	$("#endtext").html("You have finished this session in " + (player.day - 1) + " days with <span class='vert'>" + fix(player.argent + player.banque, 3) + "</span><br><br> You had a bag with " + player.maxinv + " slot which contained :<br><br>- " + player.inventory[0] + " Weed<br>" + "- " + player.inventory[1] + " Ecstasy<br>" + "- " + player.inventory[2] + " Cocaine<br>" + "- " + player.inventory[3] + " Heroine<br>" + "- " + player.inventory[4] + " Hashish<br>" + "- " + player.inventory[5] + " Keta");
 	autodel();
 }
 
 function changelocation() {
-	var LOCATIONS = ["Orléans", "Paris", "Lyon", "Marseille", "Toulouse", "Dijon", "Cannes", "Strasbourg", "Nantes", "Grenoble", "Bordeaux"];
+	var LOCATIONS = ["New York", "Las Vegas", "Toronto", "Los Angeles", "Washington", "Chicago", "Miami", "Phoenix", "Albuquerque", "New Orleans", "Seattle"];
 	if (player.day >= player.maxdays && player.maxdays != -1) endgame();
 	player.day++;
-	player.emprunt = player.emprunt + player.emprunt * 0.09;
+
+	var multiplier = random(1, 10) / 100;
+	player.emprunt += player.emprunt * multiplier;
 	chance = random(0, 10);
 	player.location = LOCATIONS[chance];
 	usurierscheck();
@@ -222,13 +224,13 @@ function resettypes() {
 
 function usurierscheck() {
 	usuchance = random(1, 10);
-	usutext = "<span class='vert'>The usurers did not pass today.</span>";
+	usutext = "<span class='vert'>The mafia left you alone for today.</span>";
 
 	if (player.emprunt > 0) {
-		if (player.argent > 100 && usuchance == 1) {
+		if (player.argent > 100 && usuchance == 1 && player.day > 3) {
 			usuprice = random(100, player.argent);
 			player.argent = player.argent - usuprice;
-			usutext = "<span class='rouge'>The usurers came today, they took $" + usuprice + " !</span>";
+			usutext = "<span class='rouge'>The mafia came today, they took " + fix(usuprice, 3) + " !</span>";
 		}
 	} else {
 		usutext = "<br>";
@@ -329,9 +331,9 @@ function PoliceCheck() {
 	if (player.inv > 0) {
 		player.inventory = [0, 0, 0, 0, 0, 0];
 		if (player.money > 10000) {
-			player.money = player.money - 10000;
+			player.money -= 10000;
 		} else {
-			player.emprunt = player.emprunt + 10000;
+			player.emprunt += 10000;
 		}
 	}
 	hideTabs();
@@ -351,9 +353,9 @@ function fight() {
 	}
 	if (player.CurLife <= 0) endgame();
 	if (player.CurLife <= 50) {
-		lifetext = "<span class='rouge bold'>" + player.CurLife + "</span>PV";
+		lifetext = "<span class='rouge bold'>" + player.CurLife + "</span>HP";
 	} else {
-		lifetext = "<span class='vert bold'>" + player.CurLife + "</span>PV";
+		lifetext = "<span class='vert bold'>" + player.CurLife + "</span>HP";
 	}
 	if (player.curEnemyLife <= 50) {
 		enemylifetext = "<span class='rouge bold'>" + player.curEnemyLife + "</span>";
@@ -361,9 +363,7 @@ function fight() {
 		enemylifetext = "<span class='vert bold'>" + player.curEnemyLife + "</span>";
 	}
 
-	var ELIFETEXT = player.curEnemyLife <= 50 ? "rouge bold" : "vert bold";
-	$("#PoliceName").html("<span class='bleu'>L\'officer " + player.curEnemy + "</span> vous a remarquer et veut effectuer un controle.<br>Il dispose de <span class='" + ELIFETEXT + "'>" + player.CurLife + "</span>/" + player.curEnemyMaxLife + "PV.");
-	$("#fightresult").html("Vous n\'avez plus que " + lifetext + ".");
+    $("#fightresult").html("You now have " + lifetext + ".");
 	updateprogression();
 }
 
@@ -385,7 +385,7 @@ function chooseNewEnemy() {
 
 function heal() {
 	if (player.CurLife < 100) {
-		player.CurLife = player.CurLife + 5;
+		player.CurLife += 5;
 	}
 	if (player.CurLife > 100) {
 		player.CurLife = 100;

@@ -102,14 +102,15 @@ body {
 }
 
 .DPI {
-    font-size: 2rem;
+    font-size: 2rem!important;
+    margin: 0!important;
 }
 
 .DPC {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
+    -webkit-box-orient: vertical!important;
+    -webkit-box-direction: normal!important;
+    -ms-flex-direction: column!important;
+    flex-direction: column!important;
 }
 
 .title {
