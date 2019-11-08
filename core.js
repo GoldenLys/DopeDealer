@@ -44,7 +44,7 @@ var EVENTTEXTS = {
 (function () {
 	if (location.href.match(/(goldenlys.github.io).*/)) window.oncontextmenu = (e) => { e.preventDefault(); };
 	if (localStorage.getItem("DopeDealer") != null) { load(); }
-	document.title = "Dope Dealer";
+	document.title = "Dope Dealer v" + version;
 	console.log("Have fun on Dope Dealer !   - Purple");
 	newprices();
 	usurierscheck();
@@ -249,7 +249,7 @@ function buyweed() {
 }
 
 function Buy(id, qty) {
-	if (player.argent >= (DRUGPRICE[id] * qty) && (player.inv + qty) < player.maxinv) {
+	if (player.argent >= (DRUGPRICE[id] * qty) && (player.inv + qty) <= player.maxinv) {
 		player.inventory[id] += qty;
 		player.argent -= DRUGPRICE[id] * qty;
 	}
