@@ -13,7 +13,7 @@ function fix(x, type) {
 	  if (x > 10000) return numeral(x).format("0.00a");
 	}
 	if (type == 2) return numeral(x).format("0.0a");
-	if (type == 3) return numeral(x).format("$0,0[.]00");
+	if (type == 3) return numeral(x).format("$0,00");
   } 
 
 function getDate() {

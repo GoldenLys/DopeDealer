@@ -1,7 +1,6 @@
 var version = "0.4";
 var usutext = "";
 var sactexte = "0";
-var enemylifetext = "";
 var DRUGSTYPE = ["normal", "normal", "normal", "normal", "normal", "normal"];
 var DRUGSNAME = ["Weed", "Ecstasy", "Cocaine", "Heroine", "Meth", "Keta"];
 var NAMES = ["Evans", "Michel", "Pablo", "Cain", "Bernard", "Alex", "Simon", "Bond", "Reese", "Smith"];
@@ -16,6 +15,7 @@ var player = {
 	inv: 0,
 	maxinv: 100,
 	day: 0,
+	isInFight: 0,
 	maxdays: 31,
 	prices: [0, 0, 0, 0, 0, 0],
 	dtext: "30 days",
@@ -59,6 +59,7 @@ var EVENTTEXTS = {
 	newprices();
 	CheckMafia();
 	SetMaxDays(player.maxdays);
+	if (player.isInFight == 1) ShowMenu(5);
 	player.day++;
 	save();
 	UPDATE();
@@ -69,7 +70,7 @@ function UPDATE() {
 	for (var item in player.inventory) { player.inv += player.inventory[item]; }
 	var OFFICER = player.copskilled < 10 ? NAMES[player.copskilled] : NAMES[9];
 	$("#version").html("v" + version);
-	$("#BTN3").html("<i class='jaune map marker alternate icon DPI'></i>" + player.location);
+	$("#BTN7").html("<i class='jaune map marker alternate icon DPI'></i>" + player.location);
 	$("#sactext").html(sactexte);
 	$("#CASH").html("<i class='fas fa-sack-dollar DPI vert2'></i>" + fix(player.argent, 3));
 	$("#BANK").html("<i class='far fa-credit-card-front DPI bleu'></i>" + fix(player.banque, 3));
@@ -90,7 +91,8 @@ function UPDATE() {
 		$("#DT" + D).html(DRUGSNAME[D] + " (" + player.inventory[D] + ")");
 		$("#DP" + D).html("<span class='" + DRUGSTYPE[D] + "'>" + fix(player.prices[D], 3));
 	}
-	$("#PoliceName").html("<span class='bleu'>Officer " + OFFICER + "</span> want to control you.<br>He currently have " + enemylifetext + "/" + player.curEnemyMaxLife + "HP.");
+	var ENEMYLIFE = player.curEnemyLife <= 50 ? "rouge" : "vert";
+	$("#PoliceName").html("<span class='bleu'>Officer " + OFFICER + "</span> want to control you.<br>He currently have <span class='" + ENEMYLIFE + "'>" + player.curEnemyLife + "</span>/" + player.curEnemyMaxLife + "HP.");
 	$("#fightresult").html("You currently have " + lifetext + " HP.");
 	save();
 	checkbuttons();
@@ -103,20 +105,22 @@ function hideMenus() {
 	var IDS = ["us", "ba", "op", "sac", "sa", "combat", "endgame"];
 	$("#Main").hide();
 	for (var M in IDS) $("#menu-" + IDS[M]).hide();
-	for (var i = 0; i < 6; i++) { $("#BTN" + i).attr("class", "item DPC"); }
+	for (var i = 0; i < 8; i++) { $("#BTN" + i).attr("class", "item DPC"); }
 }
 
 function ShowMenu(id) {
-	var IDS = ["us", "ba", "op", "sac", "sa", "combat", "endgame"];
-	hideMenus();
-	if (id < 5) $("#BTN" + (id)).attr("class", "active item DPC");
-	$("#menu-" + IDS[id]).show();
+	var IDS = ["us", "ba", "op", "sac", "sa", "combat", "endgame", "Main"];
+	if (player.isInFight == 0) {
+		hideMenus();
+		if (id < 5 || id == 7) { $("#BTN" + (id)).attr("class", "active item DPC"); }
+		if (id != 7) { $("#menu-" + IDS[id]).show(); } else { $("#Main").show(); }
+	} else if (id == 5) { hideMenus(); $("#menu-" + IDS[id]).show(); }
 }
 
 function hideTabs() {
 	hideMenus();
 	$("#Main").show();
-	$("#BTN3").attr("class", "active item DPC");
+	$("#BTN7").attr("class", "active item DPC");
 }
 
 function endgame() {
@@ -155,7 +159,6 @@ function saccheck() {
 		var saccolor = sacvalue > player.maxinv ? "vert" : "rouge";
 		sactexte = "This bag can contain <span class='" + saccolor + "'>" + sacvalue + "</span> items.<br> You actually have " + player.maxinv + " slots in your bag.";
 		UPDATE();
-		ShowMenu(3);
 	}
 	if (sacchance >= 9 && sacchance < 15) CombatMode();
 	UPDATE();
@@ -247,7 +250,7 @@ function CheckMafia() {
 			usutext = "<span class='rouge'>The mafia came today, they took " + fix(usuprice, 3) + " !</span>";
 		}
 	} else {
-		usutext = "<br>";
+		usutext = "";
 	}
 	UPDATE();
 }
@@ -264,20 +267,20 @@ function buyweed() {
 
 function Buy(id, qty) {
 	if (qty == "max" && player.argent >= player.prices[id]) {
-			qty = Math.floor(player.argent / player.prices[id]);
-			if((player.inv + qty) > player.maxinv) qty = player.maxinv - player.inv;
+		qty = Math.floor(player.argent / player.prices[id]);
+		if ((player.inv + qty) > player.maxinv) qty = player.maxinv - player.inv;
 	}
 	if (player.argent >= (player.prices[id] * qty) && (player.inv + qty) <= player.maxinv) {
 		player.inventory[id] += qty;
 		player.argent -= player.prices[id] * qty;
-	} 
+	}
 	//else { console.log("BUY " + qty + " " + DRUGSNAME[id] + " : " + (player.argent >= (player.prices[id] * qty)) + " | " + ((player.inv + qty) <= player.maxinv));}
 	UPDATE();
 }
 
 function Sell(id, qty) {
-	if (qty == "max" &&player.inventory[id] >= 1) {
-			qty = player.inventory[id];
+	if (qty == "max" && player.inventory[id] >= 1) {
+		qty = player.inventory[id];
 	}
 	if (player.inventory[id] > 0 && player.inventory[id] >= qty) {
 		player.inventory[id] -= qty;
@@ -337,17 +340,13 @@ function checkbuttons() {
 
 function CombatMode() {
 	ShowMenu(5);
-	if (player.curEnemyLife <= 50) {
-		enemylifetext = "<span class='rouge'>" + player.curEnemyLife + "</span>";
-	} else {
-		enemylifetext = "<span class='vert'>" + player.curEnemyLife + "</span>";
-	}
+	player.isInFight = 1;
 	UPDATE();
 }
 
 function closeCombat() {
 	var luck = random(1, 100);
-	if (luck <= 25) PoliceCheck(); else hideTabs();
+	if (luck <= 25) PoliceCheck(); else { hideTabs(); player.isInFight = 0; }
 }
 
 function PoliceCheck() {
@@ -365,25 +364,18 @@ function PoliceCheck() {
 
 function fight() {
 	if (player.curEnemyLife > 0) {
-		player.curEnemyLife = player.curEnemyLife - player.attack;
-		player.CurLife = player.CurLife - player.enemyAttack;
+		player.curEnemyLife -= player.attack;
+		player.CurLife -= player.enemyAttack;
 	} else {
 		chooseNewEnemy();
 		hideTabs();
+		player.isInFight = 0;
 	}
 	if (player.curEnemyLife <= 0) {
 		chooseNewEnemy();
 		hideTabs();
+		player.isInFight = 0;
 	}
-	var COLOR = player.CurLife <= 50 ? "rouge" : "vert";
-	lifetext = "<span class='" + COLOR + "'>" + player.CurLife + "</span>HP";
-	if (player.curEnemyLife <= 50) {
-		enemylifetext = "<span class='rouge bold'>" + player.curEnemyLife + "</span>";
-	} else {
-		enemylifetext = "<span class='vert bold'>" + player.curEnemyLife + "</span>";
-	}
-
-	$("#fightresult").html("You currently have " + lifetext + ".");
 	UPDATE();
 }
 
