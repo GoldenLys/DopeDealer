@@ -1,4 +1,4 @@
-var version = "0.3";
+var version = "0.4";
 var usutext = "";
 var sactexte = "0";
 var enemylifetext = "";
@@ -51,7 +51,7 @@ var EVENTTEXTS = {
 		$("#title").html("DopeDealer");
 		$("#stats").attr("class", "ui black message nopadding");
 		$("#footer").attr("class", "ui black message");
-		}
+	}
 	if (location.href.match(/(goldenlys.github.io).*/)) window.oncontextmenu = (e) => { e.preventDefault(); };
 	if (localStorage.getItem("DopeDealer") != null) { load(); }
 	document.title = "Dope Dealer v" + version;
@@ -191,7 +191,6 @@ function newprices() {
 }
 
 function EVENT(ID, COUNT) {
-	console.log("ID :" + ID + " COUNT: " + COUNT);
 	eventtype = random(0, 1);
 	if (COUNT == 1 && ID == DRUGEVENT[0]) eventtype = 2;
 	if (eventtype == 0) {
@@ -264,14 +263,22 @@ function buyweed() {
 }
 
 function Buy(id, qty) {
+	if (qty == "max" && player.argent >= player.prices[id]) {
+			qty = Math.floor(player.argent / player.prices[id]);
+			if((player.inv + qty) > player.maxinv) qty = player.maxinv - player.inv;
+	}
 	if (player.argent >= (player.prices[id] * qty) && (player.inv + qty) <= player.maxinv) {
 		player.inventory[id] += qty;
 		player.argent -= player.prices[id] * qty;
-	}
+	} 
+	//else { console.log("BUY " + qty + " " + DRUGSNAME[id] + " : " + (player.argent >= (player.prices[id] * qty)) + " | " + ((player.inv + qty) <= player.maxinv));}
 	UPDATE();
 }
 
 function Sell(id, qty) {
+	if (qty == "max" &&player.inventory[id] >= 1) {
+			qty = player.inventory[id];
+	}
 	if (player.inventory[id] > 0 && player.inventory[id] >= qty) {
 		player.inventory[id] -= qty;
 		player.argent += player.prices[id] * qty;
@@ -307,6 +314,7 @@ function Withdraw(cash) {
 function Repay(cash) {
 	if (cash == "all") cash = player.emprunt;
 	if (player.argent >= cash) {
+		if (cash > player.emprunt) cash = player.emprunt;
 		player.argent -= cash;
 		player.emprunt -= cash;
 		if (player.emprunt < 0) player.emprunt = 0;
@@ -317,11 +325,11 @@ function Repay(cash) {
 function checkbuttons() {
 	for (var D in DRUGSTYPE) {
 		var BUYBTN = player.argent >= player.prices[D] ? "" : " disabled";
-		var BUYBTN2 = player.argent >= player.prices[D] * 10 ? "" : " disabled";
+		var BUYBTN2 = player.argent >= player.prices[D] * 1 ? "" : " disabled";
 		$("#buy-" + D).attr("class", "ui inverted green button" + BUYBTN);
 		$("#buy10-" + D).attr("class", "ui inverted green button" + BUYBTN2);
 		var SELLBTN = player.inventory[D] > 0 ? "" : " disabled";
-		var SELLBTN2 = player.inventory[D] >= 10 ? "" : " disabled";
+		var SELLBTN2 = player.inventory[D] >= 1 ? "" : " disabled";
 		$("#sell-" + D).attr("class", "ui inverted red button" + SELLBTN);
 		$("#sell10-" + D).attr("class", "ui inverted red button" + SELLBTN2);
 	}

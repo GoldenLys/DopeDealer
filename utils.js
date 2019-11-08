@@ -110,7 +110,6 @@ var saveDataToClipboard = function () {
 
 var importSave = function () {
 	var save = prompt("Paste a valid save code here");
-	console.log(save);
 	if (save) {
 		restoreSave(save);
 	}
