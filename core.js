@@ -1,11 +1,14 @@
-var version = "0.2";
+var version = "0.3";
 var usutext = "";
 var sactexte = "0";
 var enemylifetext = "";
 var DRUGSTYPE = ["normal", "normal", "normal", "normal", "normal", "normal"];
 var DRUGSNAME = ["Weed", "Ecstasy", "Cocaine", "Heroine", "Hashish", "Keta"];
-var DRUGPRICE = [0, 0, 0, 0, 0, 0];
-var MAXDAYSTEXT = "30 days";
+var NAMES = ["Evans", "Michel", "Pablo", "Cain", "Bernard", "Alex", "Simon", "Bond", "Reese", "Smith"];
+var OFFICER = "";
+var MAXDAYSTEXT = "";
+var DRUGEVENT = [0, 0];
+var EVENTTEXT = ["", ""];
 var player = {
 	emprunt: 2500,
 	argent: 1000,
@@ -14,10 +17,10 @@ var player = {
 	maxinv: 100,
 	day: 0,
 	maxdays: 31,
+	prices: [0, 0, 0, 0, 0, 0],
 	dtext: "30 days",
 	location: "New York",
 	inventory: [0, 0, 0, 0, 0, 0],
-	curEnemy: "Evan",
 	curEnemyLife: 100,
 	curEnemyMaxLife: 100,
 	attack: 5,
@@ -42,21 +45,29 @@ var EVENTTEXTS = {
 };
 
 (function () {
+	if (screen.width <= 1280) {
+		$("#menu").attr("class", "ui fluid vertical inverted menu");
+		$("#title").attr("class", "MobileTitle");
+		$("#title").html("DopeDealer");
+		$("#stats").attr("class", "ui black message nopadding");
+		$("#footer").attr("class", "ui black message");
+		}
 	if (location.href.match(/(goldenlys.github.io).*/)) window.oncontextmenu = (e) => { e.preventDefault(); };
 	if (localStorage.getItem("DopeDealer") != null) { load(); }
 	document.title = "Dope Dealer v" + version;
 	console.log("Have fun on Dope Dealer !   - Purple");
 	newprices();
-	usurierscheck();
+	CheckMafia();
 	SetMaxDays(player.maxdays);
 	player.day++;
 	save();
-	updateprogression();
+	UPDATE();
 })();
 
-function updateprogression() {
+function UPDATE() {
 	player.inv = 0;
 	for (var item in player.inventory) { player.inv += player.inventory[item]; }
+	var OFFICER = player.copskilled < 10 ? NAMES[player.copskilled] : NAMES[9];
 	$("#version").html("v" + version);
 	$("#BTN3").html("<i class='jaune map marker alternate icon DPI'></i>" + player.location);
 	$("#sactext").html(sactexte);
@@ -72,13 +83,14 @@ function updateprogression() {
 	$("#maxactuel").html("Bank Account: <span class='bleu'>" + fix(player.banque, 3) + "</span>");
 	$("#usuactuel").html("Debt Value: <span class='rouge'>" + fix(player.emprunt, 3) + "</span>");
 	$("#INVENTORY").html("<i class='fas fa-sack DPI'></i>" + (player.maxinv - player.inv) + " slots");
-	$("#valeurclic").html(eventtext + "<br>" + usutext);
+	var EVENTS = DRUGEVENT[0] != DRUGEVENT[1] ? EVENTTEXT[0] + "<br>" + EVENTTEXT[1] : EVENTTEXT[1];
+	$("#valeurclic").html(EVENTS + "<br>" + usutext);
 	$("#MAXDAYS").html("Actual maximum playtime: " + MAXDAYSTEXT);
 	for (var D in DRUGSTYPE) {
 		$("#DT" + D).html(DRUGSNAME[D] + " (" + player.inventory[D] + ")");
-		$("#DP" + D).html("<span class='" + DRUGSTYPE[D] + "'>" + fix(DRUGPRICE[D], 3));
+		$("#DP" + D).html("<span class='" + DRUGSTYPE[D] + "'>" + fix(player.prices[D], 3));
 	}
-	$("#PoliceName").html("<span class='bleu'>The officer " + player.curEnemy + "</span> wants to do a control.<br>He currently have " + enemylifetext + "/" + player.curEnemyMaxLife + "HP.");
+	$("#PoliceName").html("<span class='bleu'>Officer " + OFFICER + "</span> want to control you.<br>He currently have " + enemylifetext + "/" + player.curEnemyMaxLife + "HP.");
 	$("#fightresult").html("You currently have " + lifetext + " HP.");
 	save();
 	checkbuttons();
@@ -91,7 +103,6 @@ function hideMenus() {
 	var IDS = ["us", "ba", "op", "sac", "sa", "combat", "endgame"];
 	$("#Main").hide();
 	for (var M in IDS) $("#menu-" + IDS[M]).hide();
-
 	for (var i = 0; i < 6; i++) { $("#BTN" + i).attr("class", "item DPC"); }
 }
 
@@ -120,61 +131,80 @@ function changelocation() {
 	var LOCATIONS = ["New York", "Las Vegas", "Toronto", "Los Angeles", "Washington", "Chicago", "Miami", "Phoenix", "Albuquerque", "New Orleans", "Seattle"];
 	if (player.day >= player.maxdays && player.maxdays != -1) endgame();
 	player.day++;
-
-	var multiplier = random(1, 10) / 100;
+	var multiplier = random(1, 5) / 100;
 	player.emprunt += player.emprunt * multiplier;
 	chance = random(0, 10);
 	player.location = LOCATIONS[chance];
-	usurierscheck();
-	heal();
+	if (player.CurLife < 100) { player.CurLife += 5; }
+	if (player.CurLife > 100) { player.CurLife = 100; }
+	if (player.curEnemyLife < player.curEnemyMaxLife) player.curEnemyLife += player.enemyAttack;
+	if (player.curEnemyLife > player.curEnemyMaxLife) player.curEnemyLife = player.curEnemyMaxLife;
+	CheckMafia();
 	saccheck();
 	newprices();
-	updateprogression();
+	UPDATE();
 }
 
+
 function saccheck() {
-	var sacchance = random(1, 50);
+	var sacchance = random(1, 100);
 	if (sacchance < 10) {
-		if (sacchance >= 1 && sacchance < 5) sacvalue = random(8, 15) + player.maxinv;
-		if (sacchance >= 5 && sacchance <= 10) sacvalue = player.maxinv - random(8, 15);
-		if (sacchance < 10) ShowMenu(3);
+		if (sacchance > 0 && sacchance < 9) sacvalue = random(8, 15) + player.maxinv;
+		if (sacchance > 90 && sacchance < 100) sacvalue = player.maxinv - random(8, 15);
+		if (sacchance < 10 || sacchance > 91) ShowMenu(3);
 		var saccolor = sacvalue > player.maxinv ? "vert" : "rouge";
 		sactexte = "This bag can contain <span class='" + saccolor + "'>" + sacvalue + "</span> items.<br> You actually have " + player.maxinv + " slots in your bag.";
-		updateprogression();
-		showsacmenu();
+		UPDATE();
+		ShowMenu(3);
 	}
-	if (sacchance >= 10 && sacchance < 15) CombatMode();
-	updateprogression();
+	if (sacchance >= 9 && sacchance < 15) CombatMode();
+	UPDATE();
 }
 
 function addinv() {
 	player.maxinv = sacvalue;
 	hideTabs();
-	updateprogression();
+	UPDATE();
 }
 
 function newprices() {
-	DRUGPRICE[0] = random(5, 15);
-	DRUGPRICE[1] = random(3000, 5000);
-	DRUGPRICE[2] = random(18000, 40000);
-	DRUGPRICE[3] = random(5000, 15000);
-	DRUGPRICE[4] = random(500, 1000);
-	DRUGPRICE[5] = random(30, 100);
-	resettypes();
+	player.prices[0] = random(5, 15);
+	player.prices[1] = random(3000, 5000);
+	player.prices[2] = random(18000, 40000);
+	player.prices[3] = random(5000, 15000);
+	player.prices[4] = random(500, 1000);
+	player.prices[5] = random(30, 100);
+	for (var T in DRUGSTYPE) { DRUGSTYPE[T] = "gris"; }
+	if (player.prices[0] <= 10) DRUGSTYPE[0] = "blanc";
+	if (player.prices[1] <= 3000) DRUGSTYPE[1] = "blanc";
+	if (player.prices[2] <= 20000) DRUGSTYPE[2] = "blanc";
+	if (player.prices[3] <= 7000) DRUGSTYPE[3] = "blanc";
+	if (player.prices[4] <= 750) DRUGSTYPE[4] = "blanc";
+	if (player.prices[5] <= 50) DRUGSTYPE[5] = "blanc";
+
+	DRUGEVENT[0] = random(0, 5);
+	DRUGEVENT[1] = random(0, 5);
+	EVENT(DRUGEVENT[0], 0);
+	EVENT(DRUGEVENT[1], 1);
+
+	UPDATE();
+}
+
+function EVENT(ID, COUNT) {
+	console.log("ID :" + ID + " COUNT: " + COUNT);
 	eventtype = random(0, 1);
+	if (COUNT == 1 && ID == DRUGEVENT[0]) eventtype = 2;
 	if (eventtype == 0) {
-		DRUG = random(0, 5);
-		DRUGSTYPE[DRUG] = "rouge";
-		DRUGPRICE[DRUG] = GetDrugPrice(DRUG, "bad");
-		eventtext = EVENTTEXTS.bad[DRUG];
+		DRUGSTYPE[ID] = "rouge";
+		player.prices[ID] = GetDrugPrice(ID, "bad");
+		EVENTTEXT[COUNT] = EVENTTEXTS.bad[ID];
 	}
 	if (eventtype == 1) {
-		DRUG = random(0, 5);
-		DRUGSTYPE[DRUG] = "vert";
-		DRUGPRICE[DRUG] = GetDrugPrice(DRUG, "good");
-		eventtext = EVENTTEXTS.good[DRUG];
+		DRUGSTYPE[ID] = "vert";
+		player.prices[ID] = GetDrugPrice(ID, "good");
+		EVENTTEXT[COUNT] = EVENTTEXTS.good[ID];
 	}
-	updateprogression();
+	UPDATE();
 }
 
 function GetDrugPrice(id, type) {
@@ -207,22 +237,7 @@ function GetDrugPrice(id, type) {
 	return price;
 }
 
-function resettypes() {
-	for (var T in DRUGSTYPE) { DRUGSTYPE[T] = "normal"; }
-	DRUGPRICE[1] = random(2000, 5500);
-	DRUGPRICE[2] = random(15000, 35000);
-	DRUGPRICE[3] = random(5000, 15000);
-	DRUGPRICE[4] = random(500, 1000);
-	DRUGPRICE[5] = random(30, 100);
-	if (DRUGPRICE[0] <= 10) DRUGSTYPE[0] = "blanc";
-	if (DRUGPRICE[1] <= 3000) DRUGSTYPE[1] = "blanc";
-	if (DRUGPRICE[2] <= 20000) DRUGSTYPE[2] = "blanc";
-	if (DRUGPRICE[3] <= 7000) DRUGSTYPE[3] = "blanc";
-	if (DRUGPRICE[4] <= 750) DRUGSTYPE[4] = "blanc";
-	if (DRUGPRICE[5] <= 50) DRUGSTYPE[5] = "blanc";
-}
-
-function usurierscheck() {
+function CheckMafia() {
 	usuchance = random(1, 10);
 	usutext = "<span class='vert'>The mafia left you alone for today.</span>";
 
@@ -235,39 +250,39 @@ function usurierscheck() {
 	} else {
 		usutext = "<br>";
 	}
-	updateprogression();
+	UPDATE();
 }
 
 function buyweed() {
-	if (player.argent >= DRUGPRICE[0]) {
+	if (player.argent >= player.prices[0]) {
 		if (player.inv != player.maxinv) {
 			player.weed++;
-			player.argent = player.argent - DRUGPRICE[0];
+			player.argent = player.argent - player.prices[0];
 		}
 	}
-	updateprogression();
+	UPDATE();
 }
 
 function Buy(id, qty) {
-	if (player.argent >= (DRUGPRICE[id] * qty) && (player.inv + qty) <= player.maxinv) {
+	if (player.argent >= (player.prices[id] * qty) && (player.inv + qty) <= player.maxinv) {
 		player.inventory[id] += qty;
-		player.argent -= DRUGPRICE[id] * qty;
+		player.argent -= player.prices[id] * qty;
 	}
-	updateprogression();
+	UPDATE();
 }
 
 function Sell(id, qty) {
 	if (player.inventory[id] > 0 && player.inventory[id] >= qty) {
 		player.inventory[id] -= qty;
-		player.argent += DRUGPRICE[id] * qty;
+		player.argent += player.prices[id] * qty;
 	}
-	updateprogression();
+	UPDATE();
 }
 
 function SetMaxDays(count) {
 	if (player.day < count || count == -1) player.maxdays = count;
 	if (count > 0) { MAXDAYSTEXT = (count - 1) + " days"; } else { MAXDAYSTEXT = "Unlimited days"; }
-	updateprogression();
+	UPDATE();
 }
 
 function Deposit(cash) {
@@ -275,7 +290,7 @@ function Deposit(cash) {
 	if (player.argent >= cash) {
 		player.argent -= cash;
 		player.banque += cash;
-		updateprogression();
+		UPDATE();
 	}
 }
 
@@ -285,7 +300,7 @@ function Withdraw(cash) {
 		player.banque -= cash;
 		player.argent += cash;
 		if (player.banque < 0) player.banque = 0;
-		updateprogression();
+		UPDATE();
 	}
 }
 
@@ -295,14 +310,14 @@ function Repay(cash) {
 		player.argent -= cash;
 		player.emprunt -= cash;
 		if (player.emprunt < 0) player.emprunt = 0;
-		updateprogression();
+		UPDATE();
 	}
 }
 
 function checkbuttons() {
 	for (var D in DRUGSTYPE) {
-		var BUYBTN = player.argent >= DRUGPRICE[D] ? "" : " disabled";
-		var BUYBTN2 = player.argent >= DRUGPRICE[D] * 10 ? "" : " disabled";
+		var BUYBTN = player.argent >= player.prices[D] ? "" : " disabled";
+		var BUYBTN2 = player.argent >= player.prices[D] * 10 ? "" : " disabled";
 		$("#buy-" + D).attr("class", "ui inverted green button" + BUYBTN);
 		$("#buy10-" + D).attr("class", "ui inverted green button" + BUYBTN2);
 		var SELLBTN = player.inventory[D] > 0 ? "" : " disabled";
@@ -319,7 +334,7 @@ function CombatMode() {
 	} else {
 		enemylifetext = "<span class='vert'>" + player.curEnemyLife + "</span>";
 	}
-	updateprogression();
+	UPDATE();
 }
 
 function closeCombat() {
@@ -333,7 +348,8 @@ function PoliceCheck() {
 		if (player.money > 10000) {
 			player.money -= 10000;
 		} else {
-			player.emprunt += 10000;
+			player.emprunt += (11000 - player.argent);
+			player.argent = 1000;
 		}
 	}
 	hideTabs();
@@ -351,44 +367,21 @@ function fight() {
 		chooseNewEnemy();
 		hideTabs();
 	}
-	if (player.CurLife <= 0) endgame();
-	if (player.CurLife <= 50) {
-		lifetext = "<span class='rouge bold'>" + player.CurLife + "</span>HP";
-	} else {
-		lifetext = "<span class='vert bold'>" + player.CurLife + "</span>HP";
-	}
+	var COLOR = player.CurLife <= 50 ? "rouge" : "vert";
+	lifetext = "<span class='" + COLOR + "'>" + player.CurLife + "</span>HP";
 	if (player.curEnemyLife <= 50) {
 		enemylifetext = "<span class='rouge bold'>" + player.curEnemyLife + "</span>";
 	} else {
 		enemylifetext = "<span class='vert bold'>" + player.curEnemyLife + "</span>";
 	}
 
-    $("#fightresult").html("You now have " + lifetext + ".");
-	updateprogression();
+	$("#fightresult").html("You currently have " + lifetext + ".");
+	UPDATE();
 }
 
 function chooseNewEnemy() {
 	player.copskilled++;
-	player.curEnemyMaxLife = player.curEnemyMaxLife + 10;
+	player.curEnemyMaxLife += 10;
 	player.curEnemyLife = player.curEnemyMaxLife;
-	player.enemyAttack = player.enemyAttack + player.copskilled * 1.5;
-	if (player.copskilled > 0) player.curEnemy = "Michel";
-	if (player.copskilled > 1) player.curEnemy = "Pablo";
-	if (player.copskilled > 2) player.curEnemy = "Lucas";
-	if (player.copskilled > 3) player.curEnemy = "Yanis";
-	if (player.copskilled > 4) player.curEnemy = "Bernard";
-	if (player.copskilled > 6) player.curEnemy = "Alexandre";
-	if (player.copskilled > 7) player.curEnemy = "Diego";
-	if (player.copskilled > 8) player.curEnemy = "Simon";
-	if (player.copskilled > 9) player.curEnemy = "Armand";
-}
-
-function heal() {
-	if (player.CurLife < 100) {
-		player.CurLife += 5;
-	}
-	if (player.CurLife > 100) {
-		player.CurLife = 100;
-	}
-	if (player.curEnemyLife < 100) player.curEnemyLife++;
+	player.enemyAttack += player.copskilled * 1.5;
 }

@@ -73,7 +73,6 @@ var canSave = 1;
 
 // Sauvegarde le jeu au format JSON dans le localStorage
 var save = function () {
-	var date = new Date();
 	if (canSave) {
 		localStorage.setItem("DopeDealer", JSON.stringify(player));
 	}
@@ -89,11 +88,8 @@ var load = function () {
 	for (var property in savegame) {
 		if (typeof savegame[property] !== 'undefined') player[property] = savegame[property];
 	}
-
-	var date = new Date();
-	$("#cityname").val(player.name);
 	newprices();
-	updateprogression();
+	UPDATE();
 };
 
 var exportSave = function () {

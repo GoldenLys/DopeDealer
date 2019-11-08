@@ -8,12 +8,16 @@
     --blue: rgb(0, 120, 255);
     --pink: rgb(237, 34, 255);
     --purple: rgb(137, 47, 255);
-    --grey: rgb(27, 28, 29);
+    --grey: rgb(105, 105, 105);
     --darkgrey5: rgba(27, 28, 29, 0.75);
     --bg1: rgb(102, 255, 13);
     --bg2: rgb(20, 156, 43);
     --bg3: rgb(16, 68, 0);
 }
+
+.ui.menu, .ui.button {
+    font-family: 'Electrolize';
+ }
 
 body {
     font-family: 'Electrolize';
@@ -109,6 +113,23 @@ body {
 .DPI {
     font-size: 2rem !important;
     margin: 0 !important;
+    display: block;
+}
+
+.ui.vertical.menu .item>.DPI {
+    width: 1.18em;
+    float: right;
+}
+
+.nopadding {
+    padding: 0!important;
+}
+
+.MobileTitle {
+    font-family: 'Electrolize';
+    color: #FFF;
+    padding: .5em;
+    font-size: 3em;  
 }
 
 .DPC {
@@ -160,8 +181,6 @@ body {
     margin: 0 auto;
     position: relative;
     top: 0rem;
-    padding-top: 1.5rem;
-    padding-left: 1rem;
     height: 100%;
 }
 
@@ -176,8 +195,6 @@ body {
     position: absolute;
     text-shadow: -2px 0 var(--green);
     top: 0rem;
-    padding-top: 1.5rem;
-    padding-left: 1rem;
     height: 100%;
 }
 
@@ -192,8 +209,6 @@ body {
     position: absolute;
     text-shadow: 2px 0 var(--red);
     top: 0rem;
-    padding-top: 1.5rem;
-    padding-left: 1rem;
     height: 100%;
 }
 
@@ -400,4 +415,12 @@ body {
 .borders {
     -webkit-animation: borders 2s infinite alternate !important;
     animation: borders 2s infinite alternate !important;
+}
+
+.footer {
+    bottom: 0%;
+    left: 0%;
+    right: 0%;
+    position: fixed!important;
+    margin: 0!important;
 }

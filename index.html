@@ -10,23 +10,17 @@
     <link href="https://fonts.googleapis.com/css?family=Electrolize&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="DATA/semantic.min.css" />
     <link rel="stylesheet" type="text/css" href="https://kit-pro.fontawesome.com/releases/v5.11.1/css/pro.min.css" />
-    <link href="dopewars.css?v=0.22" rel="stylesheet" type="text/css">
+    <link href="dopewars.css?v=0.3" rel="stylesheet" type="text/css">
     </link>
 </head>
 
 <body class="noselect">
     <div class="mask"></div>
-    <div class="ui inverted menu" style="margin: 0;border-radius: 0;">
-        <div class="left menu">
-            <div class="titlecontainer">
+    <div id="menu" class="ui inverted menu" style="margin: 0;border-radius: 0;">
+        <div class="item">
+            <div id="title" class="titlecontainer">
                 <div class="glitch" data-text="DopeDealer">DopeDealer</div>
             </div>
-            <div class="item DPC" id="CASH"></div>
-            <div class="item DPC" id="BANK"></div>
-            <div class="item DPC" id="DEBT"></div>
-            <div class="item DPC" id="DAYS"></div>
-            <div class="item DPC" id="LIFE"></div>
-            <div class="item DPC" id="INVENTORY"></div>
         </div>
         <a id="BTN3" class="active item DPC" onclick="hideTabs();">New York</a>
         <a id="BTN1" class="item DPC" onclick="ShowMenu(1);"><i class="bleu credit card outline icon DPI"></i>Bank</a>
@@ -36,119 +30,141 @@
     </div>
 
     <div id="Main">
-        <div class="ui black message" style="border-radius: 0 0 .5em .5em;">
+        <div id="stats" class="ui black message" style="border-radius: 0 0 .5em .5em;">
             <div class="fluid big ui inverted yellow button" onclick="changelocation();">Change City</div>
+            <div class="ui horizontal segments">
+                <div class="ui segment" style="padding: 0;">
+                    <div id="CASH"></div>
+                </div>
+                <div class="ui segment" style="padding: 0;">
+                    <div id="BANK"></div>
+
+                </div>
+                <div class="ui segment" style="padding: 0;">
+                    <div id="DEBT"></div>
+
+                </div>
+                <div class="ui segment" style="padding: 0;">
+                    <div id="DAYS"></div>
+
+                </div>
+                <div class="ui segment" style="padding: 0;">
+                    <div id="LIFE"></div>
+                </div>
+                <div class="ui segment" style="padding: 0;">
+                    <div id="INVENTORY"></div>
+                </div>
+            </div>
         </div>
 
-        <div class="ui inverted segments" style="padding: 0.5em 0.5em;">
-            <div class="ui inverted segment">
-                <div class="ui black message" style="padding: 0em;" id="Weed">
-                    <div class="ui horizontal segments">
-                        <div class="ui left aligned segment">
-                            <div onClick="Buy(0, 1);" id="buy-0" class="ui inverted green button">BUY</div>
-                            <div onClick="Buy(0, 10);" id="buy10-0" class="ui inverted green button">BUY 10</div>
-                        </div>
-                        <div class="ui center aligned segment">
-                            <p class="title" id="DT0"></p>
-                            <p class="price" id="DP0"></p>
-                        </div>
-                        <div class="ui right aligned segment">
-                            <div onClick="Sell(0, 1);" id="sell-0" class="ui inverted red button">SELL</div>
-                            <div onClick="Sell(0, 10);" id="sell10-0" class="ui inverted red button">SELL 10</div>
-                        </div>
+        <div class="ui inverted segments" style="padding: 0.5em 0.5em;margin-top: 0;">
+            <div class="ui black message" style="padding: 0em;" id="Weed">
+                <div class="ui horizontal segments">
+                    <div class="ui left aligned segment">
+                        <div onClick="Buy(0, 1);" id="buy-0" class="ui inverted green button">BUY</div>
+                        <div onClick="Buy(0, 10);" id="buy10-0" class="ui inverted green button">BUY 10</div>
+                    </div>
+                    <div class="ui center aligned segment">
+                        <p class="title" id="DT0"></p>
+                        <p class="price" id="DP0"></p>
+                    </div>
+                    <div class="ui right aligned segment">
+                        <div onClick="Sell(0, 1);" id="sell-0" class="ui inverted red button">SELL</div>
+                        <div onClick="Sell(0, 10);" id="sell10-0" class="ui inverted red button">SELL 10</div>
                     </div>
                 </div>
+            </div>
 
-                <div class="ui black message" style="padding: 0em;" id="Ecstasy">
-                    <div class="ui horizontal segments">
-                        <div class="ui left aligned segment">
-                            <div onClick="Buy(1, 1);" id="buy-1" class="ui inverted green button">BUY</div>
-                            <div onClick="Buy(1, 10);" id="buy10-1" class="ui inverted green button">BUY 10</div>
-                        </div>
-                        <div class="ui center aligned segment">
-                            <p class="title" id="DT1"></p>
-                            <p class="price" id="DP1"></p>
-                        </div>
-                        <div class="ui right aligned segment">
-                            <div onClick="Sell(1, 1);" id="sell-1" class="ui inverted red button">SELL</div>
-                            <div onClick="Sell(1, 10);" id="sell10-1" class="ui inverted red button">SELL 10</div>
-                        </div>
+            <div class="ui black message" style="padding: 0em;" id="Ecstasy">
+                <div class="ui horizontal segments">
+                    <div class="ui left aligned segment">
+                        <div onClick="Buy(1, 1);" id="buy-1" class="ui inverted green button">BUY</div>
+                        <div onClick="Buy(1, 10);" id="buy10-1" class="ui inverted green button">BUY 10</div>
+                    </div>
+                    <div class="ui center aligned segment">
+                        <p class="title" id="DT1"></p>
+                        <p class="price" id="DP1"></p>
+                    </div>
+                    <div class="ui right aligned segment">
+                        <div onClick="Sell(1, 1);" id="sell-1" class="ui inverted red button">SELL</div>
+                        <div onClick="Sell(1, 10);" id="sell10-1" class="ui inverted red button">SELL 10</div>
                     </div>
                 </div>
+            </div>
 
-                <div class="ui black message" style="padding: 0em;" id="Cocaine">
-                    <div class="ui horizontal segments">
-                        <div class="ui left aligned segment">
-                            <div onClick="Buy(2, 1);" id="buy-2" class="ui inverted green button">BUY</div>
-                            <div onClick="Buy(2, 10);" id="buy10-2" class="ui inverted green button">BUY 10</div>
-                        </div>
-                        <div class="ui center aligned segment">
-                            <p class="title" id="DT2"></p>
-                            <p class="price" id="DP2"></p>
-                        </div>
-                        <div class="ui right aligned segment">
-                            <div onClick="Sell(2, 1);" id="sell-2" class="ui inverted red button">SELL</div>
-                            <div onClick="Sell(2, 10);" id="sell10-2" class="ui inverted red button">SELL 10</div>
-                        </div>
+            <div class="ui black message" style="padding: 0em;" id="Cocaine">
+                <div class="ui horizontal segments">
+                    <div class="ui left aligned segment">
+                        <div onClick="Buy(2, 1);" id="buy-2" class="ui inverted green button">BUY</div>
+                        <div onClick="Buy(2, 10);" id="buy10-2" class="ui inverted green button">BUY 10</div>
+                    </div>
+                    <div class="ui center aligned segment">
+                        <p class="title" id="DT2"></p>
+                        <p class="price" id="DP2"></p>
+                    </div>
+                    <div class="ui right aligned segment">
+                        <div onClick="Sell(2, 1);" id="sell-2" class="ui inverted red button">SELL</div>
+                        <div onClick="Sell(2, 10);" id="sell10-2" class="ui inverted red button">SELL 10</div>
                     </div>
                 </div>
+            </div>
 
-                <div class="ui black message" style="padding: 0em;" id="Heroine">
-                    <div class="ui horizontal segments">
-                        <div class="ui left aligned segment">
-                            <div onClick="Buy(3, 1);" id="buy-3" class="ui inverted green button">BUY</div>
-                            <div onClick="Buy(3, 10);" id="buy10-3" class="ui inverted green button">BUY 10</div>
-                        </div>
-                        <div class="ui center aligned segment">
-                            <p class="title" id="DT3"></p>
-                            <p class="price" id="DP3"></p>
-                        </div>
-                        <div class="ui right aligned segment">
-                            <div onClick="Sell(3, 1);" id="sell-3" class="ui inverted red button">SELL</div>
-                            <div onClick="Sell(3, 10);" id="sell10-3" class="ui inverted red button">SELL 10</div>
-                        </div>
+            <div class="ui black message" style="padding: 0em;" id="Heroine">
+                <div class="ui horizontal segments">
+                    <div class="ui left aligned segment">
+                        <div onClick="Buy(3, 1);" id="buy-3" class="ui inverted green button">BUY</div>
+                        <div onClick="Buy(3, 10);" id="buy10-3" class="ui inverted green button">BUY 10</div>
+                    </div>
+                    <div class="ui center aligned segment">
+                        <p class="title" id="DT3"></p>
+                        <p class="price" id="DP3"></p>
+                    </div>
+                    <div class="ui right aligned segment">
+                        <div onClick="Sell(3, 1);" id="sell-3" class="ui inverted red button">SELL</div>
+                        <div onClick="Sell(3, 10);" id="sell10-3" class="ui inverted red button">SELL 10</div>
                     </div>
                 </div>
+            </div>
 
 
-                <div class="ui black message" style="padding: 0em;" id="Hashish">
-                    <div class="ui horizontal segments">
-                        <div class="ui left aligned segment">
-                            <div onClick="Buy(4, 1);" id="buy-4" class="ui inverted green button">BUY</div>
-                            <div onClick="Buy(4, 10);" id="buy10-4" class="ui inverted green button">BUY 10</div>
-                        </div>
-                        <div class="ui center aligned segment">
-                            <p class="title" id="DT4"></p>
-                            <p class="price" id="DP4"></p>
-                        </div>
-                        <div class="ui right aligned segment">
-                            <div onClick="Sell(4, 1);" id="sell-4" class="ui inverted red button">SELL</div>
-                            <div onClick="Sell(4, 10);" id="sell10-4" class="ui inverted red button">SELL 10</div>
-                        </div>
+            <div class="ui black message" style="padding: 0em;" id="Hashish">
+                <div class="ui horizontal segments">
+                    <div class="ui left aligned segment">
+                        <div onClick="Buy(4, 1);" id="buy-4" class="ui inverted green button">BUY</div>
+                        <div onClick="Buy(4, 10);" id="buy10-4" class="ui inverted green button">BUY 10</div>
+                    </div>
+                    <div class="ui center aligned segment">
+                        <p class="title" id="DT4"></p>
+                        <p class="price" id="DP4"></p>
+                    </div>
+                    <div class="ui right aligned segment">
+                        <div onClick="Sell(4, 1);" id="sell-4" class="ui inverted red button">SELL</div>
+                        <div onClick="Sell(4, 10);" id="sell10-4" class="ui inverted red button">SELL 10</div>
                     </div>
                 </div>
+            </div>
 
 
-                <div class="ui black message" style="padding: 0em;" id="Keta">
-                    <div class="ui horizontal segments">
-                        <div class="ui left aligned segment">
-                            <div onClick="Buy(5, 1);" id="buy-5" class="ui inverted green button">BUY</div>
-                            <div onClick="Buy(5, 10);" id="buy10-5" class="ui inverted green button">BUY 10</div>
-                        </div>
-                        <div class="ui center aligned segment">
-                            <p class="title" id="DT5"></p>
-                            <p class="price" id="DP5"></p>
-                        </div>
-                        <div class="ui right aligned segment">
-                            <div onClick="Sell(5, 1);" id="sell-5" class="ui inverted red button">SELL</div>
-                            <div onClick="Sell(5, 10);" id="sell10-5" class="ui inverted red button">SELL 10</div>
-                        </div>
+            <div class="ui black message" style="padding: 0em;" id="Keta">
+                <div class="ui horizontal segments">
+                    <div class="ui left aligned segment">
+                        <div onClick="Buy(5, 1);" id="buy-5" class="ui inverted green button">BUY</div>
+                        <div onClick="Buy(5, 10);" id="buy10-5" class="ui inverted green button">BUY 10</div>
+                    </div>
+                    <div class="ui center aligned segment">
+                        <p class="title" id="DT5"></p>
+                        <p class="price" id="DP5"></p>
+                    </div>
+                    <div class="ui right aligned segment">
+                        <div onClick="Sell(5, 1);" id="sell-5" class="ui inverted red button">SELL</div>
+                        <div onClick="Sell(5, 10);" id="sell10-5" class="ui inverted red button">SELL 10</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="ui black message" style="position: absolute;left: 0;right: 0;text-align: center;bottom: 0;"
-            id="valeurclic"></div>
+    </div>
+    <div id="footer" class="footer ui black message">
+        <div id="valeurclic"></div>
     </div>
     <br>
     <!--Amélioration du sac-->
@@ -250,7 +266,7 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="DATA/semantic.min.js"></script>
 <script type="text/javascript" src="DATA/numeral.min.js"></script>
-<script src="utils.js?v=0.22"></script>
-<script src="core.js?v=0.22"></script>
+<script src="utils.js?v=0.3"></script>
+<script src="core.js?v=0.3"></script>
 
 </html>
