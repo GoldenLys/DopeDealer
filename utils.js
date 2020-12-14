@@ -14,7 +14,7 @@ function fix(x, type) {
 	}
 	if (type == 2) return numeral(x).format("0.0a");
 	if (type == 3) return numeral(x).format("$0,00");
-  } 
+  }
 
 function getDate() {
 	var today = new Date();
@@ -28,45 +28,21 @@ function random(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function toHHMMSS(id) {
-	var sec_num = parseInt(id, 10);
-	var hours = Math.floor(sec_num / 3600);
-	var minutes = Math.floor((sec_num - hours * 3600) / 60);
-	var seconds = sec_num - hours * 3600 - minutes * 60;
-	var secondstext = 0;
-	var minutestext = 0;
-	var hourstext = 0;
-	if (hours > 0) {
-		hourstext = hours + " hours ";
-	} else {
-		hourstext = "";
-	}
-	if (minutes > 0) {
-		minutestext = minutes + " minutes ";
-	} else {
-		minutestext = "";
-	}
-	if (seconds > 0) {
-		secondstext = seconds + " seconds ";
-	} else {
-		if (minutes > 0) {
-			secondstext = "";
-		} else {
-			secondstext = "0 seconds";
-		}
-	}
-	if (hours == 1) {
-		hourstext = hours + " hour ";
-	}
-	if (minutes == 1) {
-		minutestext = minutes + " minute ";
-	}
-	if (seconds == 1) {
-		secondstext = seconds + " second ";
-	}
-	var time = hourstext + minutestext + secondstext;
-	return time;
-}
+const toHHMMSS = function (number) {
+    let CONFIG = {
+        seconds: parseInt(number, 10),
+        texts: [" hour", " minute", " second"],
+        time: [0, 0, 0],
+        calc: []
+    };
+    for (let TYPE in CONFIG.time) {
+        CONFIG.calc = [Math.floor(CONFIG.seconds / 3600), Math.floor((CONFIG.seconds - CONFIG.time[0] * 3600) / 60), Math.floor(CONFIG.seconds - CONFIG.time[0] * 3600 - CONFIG.time[1] * 60)];
+        CONFIG.time[TYPE] = CONFIG.calc[TYPE];
+        CONFIG.texts[TYPE] = CONFIG.time[TYPE] === 1 ? CONFIG.time[TYPE] + CONFIG.texts[TYPE] : CONFIG.time[TYPE] + CONFIG.texts[TYPE] + "s";
+        if (CONFIG.time[TYPE] === 0 && TYPE != 2) CONFIG.texts[TYPE] = ``;
+    }
+    return `${CONFIG.texts[0]} ${CONFIG.texts[1]} ${CONFIG.texts[2]}`;
+};
 
 // Save and load functions
 var canSave = 1;
@@ -74,7 +50,7 @@ var canSave = 1;
 // Sauvegarde le jeu au format JSON dans le localStorage
 var save = function () {
 	if (canSave) {
-		localStorage.setItem("DopeDealer", JSON.stringify(player));
+		localStorage.setItem("DopeWars", JSON.stringify(player));
 	}
 
 	var tmp = new Date().getTime();
@@ -83,7 +59,7 @@ var save = function () {
 
 // R�cup�re la sauvegarde depuis le localStorage
 var load = function () {
-	var savegame = JSON.parse(localStorage.getItem("DopeDealer"));
+	var savegame = JSON.parse(localStorage.getItem("DopeWars"));
 
 	for (var property in savegame) {
 		if (typeof savegame[property] !== 'undefined') player[property] = savegame[property];
@@ -120,7 +96,7 @@ var restoreSave = function (save) {
 		var decoded = atob(save);
 		JSON.parse(decoded);
 		if (decoded) {
-			localStorage.setItem("DopeDealer", decoded);
+			localStorage.setItem("DopeWars", decoded);
 			canSave = 0;
 			location.reload();
 		} else {
@@ -141,7 +117,7 @@ var confirmReset = function () {
 };
 
 var autodel = function () {
-	localStorage.removeItem('DopeDealer');
+	localStorage.removeItem('DopeWars');
 };
 
 var ending = function () {

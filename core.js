@@ -1,4 +1,4 @@
-var version = "0.4";
+var version = "0.5";
 var usutext = "";
 var sactexte = "0";
 var DRUGSTYPE = ["normal", "normal", "normal", "normal", "normal", "normal"];
@@ -35,27 +35,31 @@ var EVENTTEXTS = {
 		"cocaine good event text",
 		"heroine good event text",
 		"meth good event text",
-		"keta good event text"],
+		"keta good event text"
+	],
 	bad: ["weed bad event text",
 		"ecstasy bad event text",
 		"cocaine bad event text",
 		"heroine bad event text",
 		"meth bad event text",
-		"keta bad event text"],
+		"keta bad event text"
+	],
 };
 
 (function () {
 	if (screen.width <= 1280) {
 		$("#menu").attr("class", "ui fluid vertical inverted menu");
 		$("#title").attr("class", "MobileTitle");
-		$("#title").html("DopeDealer");
+		$("#title").html("DopeWars");
 		$("#stats").attr("class", "ui black message nopadding");
 		$("#footer").attr("class", "ui black message");
 	}
-	if (location.href.match(/(goldenlys.github.io).*/)) window.oncontextmenu = (e) => { e.preventDefault(); };
-	if (localStorage.getItem("DopeDealer") != null) { load(); }
-	document.title = "Dope Dealer v" + version;
-	console.log("Have fun on Dope Dealer !   - Purple");
+	if (location.href.match(/(goldenlys.github.io).*/)) window.oncontextmenu = (e) => {
+		e.preventDefault();
+	};
+	if (localStorage.getItem("DopeWars") != null) load();
+	document.title = "Dope Wars v" + version;
+	console.log("Have fun on Dope Wars !   - Purple");
 	newprices();
 	CheckMafia();
 	SetMaxDays(player.maxdays);
@@ -67,7 +71,9 @@ var EVENTTEXTS = {
 
 function UPDATE() {
 	player.inv = 0;
-	for (var item in player.inventory) { player.inv += player.inventory[item]; }
+	for (var item in player.inventory) {
+		player.inv += player.inventory[item];
+	}
 	var OFFICER = player.copskilled < 10 ? NAMES[player.copskilled] : NAMES[9];
 	$("#version").html("v" + version);
 	$("#BTN7").html("<i class='jaune map marker alternate icon DPI'></i>" + player.location);
@@ -105,16 +111,22 @@ function hideMenus() {
 	var IDS = ["us", "ba", "op", "sac", "sa", "combat", "endgame"];
 	$("#Main").hide();
 	for (var M in IDS) $("#menu-" + IDS[M]).hide();
-	for (var i = 0; i < 8; i++) { $("#BTN" + i).attr("class", "item DPC"); }
+	for (var i = 0; i < 8; i++) {
+		$("#BTN" + i).attr("class", "item DPC");
+	}
 }
 
 function ShowMenu(id) {
 	var IDS = ["us", "ba", "op", "sac", "sa", "combat", "endgame", "Main"];
 	if (player.isInFight == 0) {
 		hideMenus();
-		if (id < 5 || id == 7) { $("#BTN" + (id)).attr("class", "active item DPC"); }
-		if (id != 7) { $("#menu-" + IDS[id]).show(); } else { $("#Main").show(); }
-	} else if (id == 5) { hideMenus(); $("#menu-" + IDS[id]).show(); }
+		if (id < 5 || id == 7) $("#BTN" + (id)).attr("class", "active item DPC");
+		if (id != 7) $("#menu-" + IDS[id]).show();
+		else $("#Main").show();
+	} else if (id == 5) {
+		hideMenus();
+		$("#menu-" + IDS[id]).show();
+	}
 }
 
 function hideTabs() {
@@ -139,8 +151,8 @@ function changelocation() {
 	player.emprunt += player.emprunt * multiplier;
 	chance = random(0, 10);
 	player.location = LOCATIONS[chance];
-	if (player.CurLife < 100) { player.CurLife += 5; }
-	if (player.CurLife > 100) { player.CurLife = 100; }
+	if (player.CurLife < 100) player.CurLife += 5;
+	if (player.CurLife > 100) player.CurLife = 100;
 	if (player.curEnemyLife < player.curEnemyMaxLife) player.curEnemyLife += player.enemyAttack;
 	if (player.curEnemyLife > player.curEnemyMaxLife) player.curEnemyLife = player.curEnemyMaxLife;
 	CheckMafia();
@@ -177,7 +189,9 @@ function newprices() {
 	player.prices[3] = random(5000, 15000);
 	player.prices[4] = random(500, 1000);
 	player.prices[5] = random(30, 100);
-	for (var T in DRUGSTYPE) { DRUGSTYPE[T] = "gris"; }
+	for (var T in DRUGSTYPE) {
+		DRUGSTYPE[T] = "gris";
+	}
 	if (player.prices[0] <= 10) DRUGSTYPE[0] = "blanc";
 	if (player.prices[1] <= 3000) DRUGSTYPE[1] = "blanc";
 	if (player.prices[2] <= 20000) DRUGSTYPE[2] = "blanc";
@@ -243,24 +257,18 @@ function CheckMafia() {
 	usuchance = random(1, 10);
 	usutext = "<span class='vert'>The mafia left you alone for today.</span>";
 
-	if (player.emprunt > 0) {
-		if (player.argent > 100 && usuchance == 1 && player.day > 3) {
-			usuprice = random(100, player.argent);
-			player.argent = player.argent - usuprice;
-			usutext = "<span class='rouge'>The mafia came today, they took " + fix(usuprice, 3) + " !</span>";
-		}
-	} else {
-		usutext = "";
-	}
+	if (player.emprunt > 0 && player.argent > 100 && usuchance == 1 && player.day > 3) {
+		usuprice = random(100, player.argent);
+		player.argent = player.argent - usuprice;
+		usutext = "<span class='rouge'>The mafia came today, they took " + fix(usuprice, 3) + " !</span>";
+	} else usutext = "";
 	UPDATE();
 }
 
 function buyweed() {
-	if (player.argent >= player.prices[0]) {
-		if (player.inv != player.maxinv) {
-			player.weed++;
-			player.argent = player.argent - player.prices[0];
-		}
+	if (player.argent >= player.prices[0] && player.inv != player.maxinv) {
+		player.weed++;
+		player.argent = player.argent - player.prices[0];
 	}
 	UPDATE();
 }
@@ -274,14 +282,12 @@ function Buy(id, qty) {
 		player.inventory[id] += qty;
 		player.argent -= player.prices[id] * qty;
 	}
-	//else { console.log("BUY " + qty + " " + DRUGSNAME[id] + " : " + (player.argent >= (player.prices[id] * qty)) + " | " + ((player.inv + qty) <= player.maxinv));}
 	UPDATE();
 }
 
 function Sell(id, qty) {
-	if (qty == "max" && player.inventory[id] >= 1) {
-		qty = player.inventory[id];
-	}
+	if (qty == "max" && player.inventory[id] >= 1) qty = player.inventory[id];
+
 	if (player.inventory[id] > 0 && player.inventory[id] >= qty) {
 		player.inventory[id] -= qty;
 		player.argent += player.prices[id] * qty;
@@ -291,7 +297,8 @@ function Sell(id, qty) {
 
 function SetMaxDays(count) {
 	if (player.day < count || count == -1) player.maxdays = count;
-	if (count > 0) { MAXDAYSTEXT = (count - 1) + " days"; } else { MAXDAYSTEXT = "Unlimited days"; }
+	if (count > 0) MAXDAYSTEXT = (count - 1) + " days";
+	else MAXDAYSTEXT = "Unlimited days";
 	UPDATE();
 }
 
@@ -346,15 +353,19 @@ function CombatMode() {
 
 function closeCombat() {
 	var luck = random(1, 100);
-	if (luck <= 25) PoliceCheck(); else { hideTabs(); player.isInFight = 0; }
+	if (luck <= 25) PoliceCheck();
+	else {
+		hideTabs();
+		player.isInFight = 0;
+	}
 }
 
 function PoliceCheck() {
+	player.isInFight = 0;
 	if (player.inv > 0) {
 		player.inventory = [0, 0, 0, 0, 0, 0];
-		if (player.money > 10000) {
-			player.money -= 10000;
-		} else {
+		if (player.money > 10000) player.money -= 10000;
+		else {
 			player.emprunt += (11000 - player.argent);
 			player.argent = 1000;
 		}
