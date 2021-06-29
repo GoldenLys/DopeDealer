@@ -1,20 +1,19 @@
-
 //MISC FUNCTIONS
 
 function fix(x, type) {
 	if (type == 0) {
-	  if (x < 1000) return numeral(x).format("0a");
-	  else
-		return numeral(x).format("0.0a");
+		if (x < 1000) return numeral(x).format("0a");
+		else
+			return numeral(x).format("0.0a");
 	}
 	if (type == 1) {
-	  if (x <= 1000) return numeral(x).format("0a");
-	  if (x > 1000) return numeral(x).format("0.0a");
-	  if (x > 10000) return numeral(x).format("0.00a");
+		if (x <= 1000) return numeral(x).format("0a");
+		if (x > 1000) return numeral(x).format("0.0a");
+		if (x > 10000) return numeral(x).format("0.00a");
 	}
 	if (type == 2) return numeral(x).format("0.0a");
 	if (type == 3) return numeral(x).format("$0,00");
-  }
+}
 
 function getDate() {
 	var today = new Date();
@@ -28,26 +27,20 @@ function random(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-const toHHMMSS = function (number) {
-    let CONFIG = {
-        seconds: parseInt(number, 10),
-        texts: [" hour", " minute", " second"],
-        time: [0, 0, 0],
-        calc: []
-    };
-    for (let TYPE in CONFIG.time) {
-        CONFIG.calc = [Math.floor(CONFIG.seconds / 3600), Math.floor((CONFIG.seconds - CONFIG.time[0] * 3600) / 60), Math.floor(CONFIG.seconds - CONFIG.time[0] * 3600 - CONFIG.time[1] * 60)];
-        CONFIG.time[TYPE] = CONFIG.calc[TYPE];
-        CONFIG.texts[TYPE] = CONFIG.time[TYPE] === 1 ? CONFIG.time[TYPE] + CONFIG.texts[TYPE] : CONFIG.time[TYPE] + CONFIG.texts[TYPE] + "s";
-        if (CONFIG.time[TYPE] === 0 && TYPE != 2) CONFIG.texts[TYPE] = ``;
-    }
-    return `${CONFIG.texts[0]} ${CONFIG.texts[1]} ${CONFIG.texts[2]}`;
+const toHHMMSS = function (seconds) {
+	seconds = parseInt(seconds, 10);
+	let CONFIG = {
+		texts: [" hour", " minute", " second"],
+		time: [Math.floor(seconds / 3600), Math.floor((seconds - (Math.floor(seconds / 3600) * 3600)) / 60), seconds - (Math.floor(seconds / 3600) * 3600) - (Math.floor((seconds - (Math.floor(seconds / 3600) * 3600)) / 60) * 60)]
+	};
+	for (let TYPE in CONFIG.time) {
+		CONFIG.texts[TYPE] = CONFIG.time[TYPE] === 1 ? CONFIG.time[TYPE] + CONFIG.texts[TYPE] : CONFIG.time[TYPE] + CONFIG.texts[TYPE] + "s";
+		if (CONFIG.time[TYPE] === 0 && TYPE != 2) CONFIG.texts[TYPE] = ``;
+	}
+	return `${CONFIG.texts[0]} ${CONFIG.texts[1]} ${CONFIG.texts[2]}`;
 };
 
-// Save and load functions
 var canSave = 1;
-
-// Sauvegarde le jeu au format JSON dans le localStorage
 var save = function () {
 	if (canSave) {
 		localStorage.setItem("DopeWars", JSON.stringify(player));
@@ -56,8 +49,6 @@ var save = function () {
 	var tmp = new Date().getTime();
 };
 
-
-// R�cup�re la sauvegarde depuis le localStorage
 var load = function () {
 	var savegame = JSON.parse(localStorage.getItem("DopeWars"));
 
@@ -71,7 +62,9 @@ var load = function () {
 var exportSave = function () {
 	var saveData = btoa(JSON.stringify(player));
 	if (document.queryCommandSupported("copy")) {
-		$("#copyToClipboard").css({ "visibility": "visible" });
+		$("#copyToClipboard").css({
+			"visibility": "visible"
+		});
 	}
 	$("#exportBody").html("<br><div class='ui form'><div class='ui field'><input type='text' id='saveCode' style='width:100%;'></div></div><button id='copyToClipboard' class='fluid ui red button' onclick='saveDataToClipboard()'>Copy all text</button>");
 	$("#saveCode").val(saveData);

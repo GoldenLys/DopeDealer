@@ -1,4 +1,4 @@
-var version = "0.5";
+var version = "0.6";
 var usutext = "";
 var sactexte = "0";
 var DRUGSTYPE = ["normal", "normal", "normal", "normal", "normal", "normal"];
@@ -15,7 +15,7 @@ var player = {
 	inv: 0,
 	maxinv: 100,
 	day: 0,
-	isInFight: 0,
+	status: 0,
 	maxdays: 31,
 	prices: [0, 0, 0, 0, 0, 0],
 	dtext: "30 days",
@@ -57,13 +57,13 @@ var EVENTTEXTS = {
 	if (location.href.match(/(goldenlys.github.io).*/)) window.oncontextmenu = (e) => {
 		e.preventDefault();
 	};
-	if (localStorage.getItem("DopeWars") != null) load();
+	if (localStorage.getItem("DopeWars") !== null) load();
 	document.title = "Dope Wars v" + version;
 	console.log("Have fun on Dope Wars !   - Purple");
 	newprices();
 	CheckMafia();
 	SetMaxDays(player.maxdays);
-	if (player.isInFight == 1) ShowMenu(5);
+	if (player.status == 1) ShowMenu(5);
 	player.day++;
 	save();
 	UPDATE();
@@ -118,7 +118,7 @@ function hideMenus() {
 
 function ShowMenu(id) {
 	var IDS = ["us", "ba", "op", "sac", "sa", "combat", "endgame", "Main"];
-	if (player.isInFight == 0) {
+	if (player.status == 0) {
 		hideMenus();
 		if (id < 5 || id == 7) $("#BTN" + (id)).attr("class", "active item DPC");
 		if (id != 7) $("#menu-" + IDS[id]).show();
@@ -258,10 +258,12 @@ function CheckMafia() {
 	usutext = "<span class='vert'>The mafia left you alone for today.</span>";
 
 	if (player.emprunt > 0 && player.argent > 100 && usuchance == 1 && player.day > 3) {
-		usuprice = random(100, player.argent);
+		usuprice = random(100, player.argent - 100);
+		if (player.argent > 1000) usuprice = random(1000, player.argent - 1000);
 		player.argent = player.argent - usuprice;
 		usutext = "<span class='rouge'>The mafia came today, they took " + fix(usuprice, 3) + " !</span>";
 	} else usutext = "";
+	if (player.emprunt < 0) player.emprunt = 0;
 	UPDATE();
 }
 
@@ -347,7 +349,7 @@ function checkbuttons() {
 
 function CombatMode() {
 	ShowMenu(5);
-	player.isInFight = 1;
+	player.status = 1;
 	UPDATE();
 }
 
@@ -356,17 +358,17 @@ function closeCombat() {
 	if (luck <= 25) PoliceCheck();
 	else {
 		hideTabs();
-		player.isInFight = 0;
+		player.status = 0;
 	}
 }
 
 function PoliceCheck() {
-	player.isInFight = 0;
+	player.status = 0;
 	if (player.inv > 0) {
 		player.inventory = [0, 0, 0, 0, 0, 0];
-		if (player.money > 10000) player.money -= 10000;
+		if (player.argent > 10000) player.argent -= 10000;
 		else {
-			player.emprunt += (11000 - player.argent);
+			if (player.banque === 0) player.emprunt = 1000;
 			player.argent = 1000;
 		}
 	}
@@ -380,12 +382,12 @@ function fight() {
 	} else {
 		chooseNewEnemy();
 		hideTabs();
-		player.isInFight = 0;
+		player.status = 0;
 	}
 	if (player.curEnemyLife <= 0) {
 		chooseNewEnemy();
 		hideTabs();
-		player.isInFight = 0;
+		player.status = 0;
 	}
 	UPDATE();
 }
